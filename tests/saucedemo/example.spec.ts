@@ -8,6 +8,6 @@ test.describe('go to login', () => {
 
   test('main navigation', async ({ page }) => {
     // Assertions use the expect API.
-    await expect(page).toHaveURL('https://www.saucedemo.com/');
+    await expect(page).toHaveURL('https://www.saucedem123.com/');
   });
 });

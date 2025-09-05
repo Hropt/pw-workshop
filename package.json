@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed",
+    "test:headed": "npx playwright test --headed --",
     "test:failed": "npx playwright --last-failed",
     "debug": "npx playwright test --debug",
     "test:ui": "npx playwright test --ui"
