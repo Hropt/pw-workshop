@@ -10,13 +10,14 @@ jobs:
           echo "building..."
           echo "building..."
           echo "Build complete"
-      - name: deploy
+      - name: deploy-to-T
         run: |
           echo "Totally deploying the app to test environment"
           echo "deploying..."
           echo "deploying..."
           echo "Deploy complete"
   playwright-tests:
+    needs: [build-and-deploy-to-T]
     timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
