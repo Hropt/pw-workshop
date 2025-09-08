@@ -1,9 +1,5 @@
-name: Deploy
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+name: Deploy & Test
+on: push
 jobs:
   build-and-deploy-to-T:
     runs-on: ubuntu-latest
@@ -20,9 +16,14 @@ jobs:
           echo "deploying..."
           echo "deploying..."
           echo "Deploy complete"
-  test:
+  playwright-tests:
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2]
+        shardTotal: [2]
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -31,17 +32,43 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install chromium --only-shell
     - name: Run Playwright tests
-      run: npx playwright test
-    - uses: actions/upload-artifact@v4
+      run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+    - name: Upload blob report to GitHub Actions Artifacts
       if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@v4
       with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 5
+        name: blob-report-${{ matrix.shardIndex }}
+        path: blob-report
+        retention-days: 1
+  merge-reports:
+    if: ${{ !cancelled() }}
+    needs: [playwright-tests]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Download blob reports from GitHub Actions Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: all-blob-reports
+        pattern: blob-report-*
+        merge-multiple: true
+    - name: Merge into HTML Report
+      run: npx playwright merge-reports --reporter html ./all-blob-reports
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v4
+      with:
+        name: html-report--attempt-${{ github.run_attempt }}
+        path: playwright-report
+        retention-days: 14
   deploy-to-production:
-    needs: test
+    needs: merge-reports
     runs-on: ubuntu-latest
     steps:
       - name: yeet
@@ -50,3 +77,4 @@ jobs:
           echo "deploying..."
           echo "deploying..."
           echo "Deployed to production"
+  
