@@ -15,7 +15,7 @@ test.describe('login', () => {
     await expect(page.getByTestId("inventory-item-name").first()).toBeVisible()
   });
 
-  test.only('as standard user using POM', async ({ page }) => {
+  test('as standard user using POM', async ({ page }) => {
     const loginPage = new SauceDemoLoginPage(page);
     loginPage.logIn("standard_user", "secret_sauce")
     await expect(page.getByTestId("inventory-item-name").first()).toBeVisible()
