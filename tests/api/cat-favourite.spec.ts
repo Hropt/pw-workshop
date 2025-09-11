@@ -10,10 +10,11 @@ test.describe('check that cat is', () => {
     const cat = await getCat.json()
     
     // get favourite cats
-    const favourites = await request.get(`${ baseUrl }favourites/`, {
+    const favouriteCats = await request.get(`${ baseUrl }favourites/`, {
       headers: {
         "x-api-key": `${process.env.CAT_API_TOKEN}`
       },
     });
+    expect(favouriteCats.ok()).toBeTruthy()
   });
 });

@@ -10,6 +10,7 @@ export class SauceDemoLoginPage {
     this.page = page;
     this.usernameInput = page.locator('[data-test="username"]');
     this.passwordInput = page.locator('[data-test="password"]');
+    this.loginButton = page.locator('[data-test="login-button"]');
   }
 
   async logIn(username: string, password:string) {
