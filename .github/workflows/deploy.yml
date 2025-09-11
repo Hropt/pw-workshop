@@ -19,6 +19,7 @@ jobs:
   playwright-tests:
     needs: [build-and-deploy-to-T]
     timeout-minutes: 10
+    environment: playwright-tests
     env:
       CAT_API_KEY: ${{ secrets.CAT_API_KEY }}
     runs-on: ubuntu-latest
