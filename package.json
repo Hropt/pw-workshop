@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed",
+    "test:headed": "npx playwright test --headed --",
     "test:failed": "npx playwright --last-failed",
     "debug": "npx playwright test --debug",
     "test:ui": "npx playwright test --ui"
@@ -17,5 +17,8 @@
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@types/node": "^24.3.1"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.10.2"
   }
 }
