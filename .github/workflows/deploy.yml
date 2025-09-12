@@ -19,9 +19,6 @@ jobs:
   playwright-tests:
     needs: [build-and-deploy-to-T]
     timeout-minutes: 10
-    environment: playwright-tests
-    env:
-      CAT_API_KEY: ${{ secrets.CAT_API_KEY }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -39,6 +36,8 @@ jobs:
       run: npx playwright install chromium --only-shell
     - name: Run Playwright tests
       run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+      env:
+        CAT_API_KEY: ${{ secrets.CAT_API_KEY }}
     - name: Upload blob report to GitHub Actions Artifacts
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
