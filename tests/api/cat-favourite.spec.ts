@@ -12,7 +12,7 @@ test.describe('cat api -  ', () => {
     // get favourite cats
     const favouriteCats = await request.get(`${ baseUrl }favourites/`, {
       headers: {
-        "x-api-key": `${process.env.CAT_API_TOKEN}`
+        "x-api-key": `${process.env.CAT_API_KEY}`
       },
     });
     expect(favouriteCats.ok()).toBeTruthy()
